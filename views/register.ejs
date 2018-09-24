@@ -1,0 +1,36 @@
+<html>
+<title>Register Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href='/stylesheets/w3css.css'>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/javascripts/login.js"></script>
+<script src="/javascripts/cookie.js"></script>
+
+<body class="w3-light-grey">
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+    <a href="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey">Back</a>
+    <span class="w3-bar-item w3-right"><b>RestaurantAdvisor</b></span>
+</div>
+
+<div class="w3-main w3-row-padding" style="margin-top:100px;" >
+    <div class="w3-col l3 m2"><p></p></div>
+    <form class="w3-col l6 m8 s12" onsubmit="event.preventDefault(); register();">
+        <p>
+            <label>Username</label>
+            <input class="w3-input" type="text" name="username" id="username" required></p>
+        <p>
+            <label>Password</label>
+            <input class="w3-input" type="password" name="password" id="password" required></p>
+        <p>
+            <label>Confirm Password</label>
+            <input class="w3-input" type="password" name="password" id="con-password" required></p>
+        <p>
+            <input type="submit" value="Register" class="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">
+            <a href="/login" class="w3-button w3-block w3-section">Login now</a>
+        </p>
+    </form>
+</div>
+</body>
+</html>

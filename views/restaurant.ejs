@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<title>Restaurant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="/javascripts/restaurant.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.raty.js"></script>
+<script type="text/javascript" src="http://localhost:80/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/javascripts/rating.js"></script>
+<script type="text/javascript" src="/javascripts/imageupload.js"></script>
+<script type="text/javascript" src="/javascripts/review.js"></script>
+<script type="text/javascript" src="/javascripts/cookie.js"></script>
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwd_gx59uMIyQGnkwHjqxp54phbW4bwYI">
+</script>
+
+<link rel="stylesheet" href="/stylesheets/w3css.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<body class="w3-light-grey">
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+    <a href="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey">Back</a>
+    <span class="w3-bar-item w3-right"><b>Restaurant </b>Advisor</span>
+</div>
+
+<!-- Page Container -->
+<div class="w3-content" style="max-width:1500px; margin-top:50px">
+    <!-- The Grid -->
+    <div class="w3-row-padding">
+        <!-- Left Column -->
+        <div class="w3-third">
+            <div class="w3-white w3-text-grey w3-card-4">
+                <div class="w3-display-container">
+                   <img id="image" style="width:100%" alt="Restaurant" />
+                    <div class="w3-margin w3-text-black">
+                        <h1 id="name"></h1>
+                    </div>
+                </div>
+                <div class="w3-container">
+
+                    <p><i class="material-icons w3-margin-right w3-large w3-text-teal">location_on</i><span id="address"></span></p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><span id="borough"></span></p>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i><span id="phone"></span></p>
+                    <p><i class="material-icons w3-margin-right w3-large w3-text-teal">local_post_office</i><span id="postcode"></span></p>
+                    <p><i class="fa fa-clock-o w3-margin-right w3-large w3-text-teal"></i><span id="openhours"></span></p>
+                    <hr>
+                    <p class="w3-large"><b><i class="fa fa-map-pin w3-margin-right w3-text-teal" ></i>Map</b></p>
+                    <div class="w3-light-grey w3-small w3-margin-bottom">
+                        <div id="res-map" style="width:100%; height: 400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h2 class="w3-text-black w3-padding-16">Restaurant introduction</h2>
+                <div class="w3-container">
+                    <h5 class="w3-opacity"><b></b></h5>
+                    <h6 class="w3-text-teal">Cuisine : </h6><p id="cuisine"></p>
+                    <hr>
+                    <h6 class="w3-text-teal">Features : </h6><p id="features"></p>
+                    <hr>
+                    <h6 class="w3-text-teal">Average Rating :</h6> <p id="rating"></p>
+                    <p>Total reviewed people:<span id = 'reviewed-people'></span></p>
+                    <hr>
+                    <h6 class="w3-text-teal">Description : </h6>
+                    <p id="description"></p>
+
+                    <hr>
+                </div>
+
+
+            </div>
+
+            <div class="w3-container w3-card w3-white">
+                <h2 class="w3-text-grey w3-padding-16">Review</h2>
+                <div id="review-container" class="w3-container" style="overflow:auto; max-height: 500px">
+                </div>
+                <div>
+                    </div>
+                    <h2>Customer reviews</h2>
+                    <div class="w3-padding">
+                        <textarea id="comment" style="width: 100%" maxlength="1000" value="" rows="4" cols="50" placeholder="Share your comment to everyone!" onkeyup=check(this)></textarea>
+                        <p id="remainder"></p>
+                        rating:<div id="stars"></div>
+
+                        <div class="w3-margin-top">
+                            <button class="w3-button w3-green" id="openvedio" onclick=opencemera()>open cemera</button>
+                            <input class="w3-margin-left" id="comment_image" type="file" accept="image/*" onclick=upload_iamge()>
+                        </div>
+
+
+                        <hr>
+                        <div id="videodiv">
+                            <video autoplay id="videoplay" title="click for taking a photo" width="0" height="0"></video>
+                        </div>
+                        <canvas id="show_image" style="max-height: 300px" height="1" width="1"></canvas>
+
+                        <div class="w3-bar w3-margin-top">
+                            <input class="w3-button w3-bar-item w3-right w3-blue" type="button" value="Submit Review" onclick=submitComment()>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <input type="hidden" value="0" id="review-rating">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    if(window.navigator.onLine) {
+        initPage();
+        initReviews();
+        showRatingSelector();
+    }
+</script>
+
+
+</body>
+</html>

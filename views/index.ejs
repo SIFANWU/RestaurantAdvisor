@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<title>Restaurant Advisor</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href='/stylesheets/w3css.css'>
+<script type="text/javascript" src="/javascripts/jquery.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.raty.js"></script>
+<script src="/javascripts/index.js"></script>
+<script src="/javascripts/rating.js"></script>
+<script src="/javascripts/cookie.js"></script>
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwd_gx59uMIyQGnkwHjqxp54phbW4bwYI">
+</script>
+
+
+<body class="w3-light-grey" >
+
+<div id="title_bar" class="w3-bar w3-top w3-white" style="box-shadow: 0px 1px 1px #888888;">
+    <span class="w3-bar-item w3-left w3-large"><a style="text-decoration: none" href="/"><b>Restaurant Advisor</b></a> </span>
+    <span id = 'status' style="color: green" class="w3-bar-item w3-left w3-large">Online</span>
+    <span id = "login_button" class="w3-bar-item w3-right w3-large" ><a style="text-decoration: none" href="/login">Login</a></span>
+</div>
+
+<div class="w3-display-container" style="margin-top: 40px">
+    <img src="images/restaurant.jpeg" style="width: 100%">
+    <div class="w3-display-middle" style="width: 80%">
+        <form id = "xForm" onsubmit="event.preventDefault();searchRestaurant();" class="w3-row-padding" >
+            <p class="w3-col l3 m3 s6">
+                <input id="keyword" class="w3-input w3-border" placeholder="Keywords" required>
+            </p>
+            <p class="w3-col l3 m3 s6">
+                <input id="postcode" class="w3-input w3-border" placeholder="Postcode (optional)">
+            </p>
+            <p class="w3-col l3 m3 s6">
+                <input id="cuisine" class="w3-input w3-border" placeholder="Cuisine type (optional)">
+            </p>
+            <p class="w3-col l3 m3 s6">
+                <input class= "w3-button w3-green" style="width: 100%" type="submit" value="Search">
+            </p>
+        </form>
+
+        <div class="w3-margin-left">
+            <div itemscope itemtype="http://schema.org/Product" class="w3-small w3-button w3-green w3-left"><span itemprop="name"><b>Search Tags : </b></span></div>
+            <div itemscope itemtype="http://schema.org/Product" onclick="searchByTag('British');" class="w3-small w3-button w3-blue w3-bar-item w3-left"><span itemprop="name">British</span></div>
+            <div itemscope itemtype="http://schema.org/Product" onclick="searchByTag('Sheffield');" class="w3-small w3-button w3-blue w3-bar-item w3-left"><span itemprop="name">Sheffield</span></div>
+            <div itemscope itemtype="http://schema.org/Product" onclick="searchByTag('Asian');" class="w3-small w3-button w3-blue w3-bar-item w3-left"><span itemprop="name">Asian</span></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="w3-main w3-margin-top" style="max-width:2000px;">
+
+  <div id="content">
+      <div id="title_map" class="w3-margin">
+
+          <span class="w3-bar-item w3-large"><b>Searched Restaurant:</b></span>
+          <div onclick="sortRestaurant();" class="w3-button w3-blue w3-bar-item w3-right">Sort by rank</div>
+      </div>
+      <div  id="resContainer" class="w3-row-padding w3-border-bottom" style="min-height: 150px">
+
+      </div>
+
+
+    <div id="title_map" class="w3-margin">
+
+        <span class="w3-bar-item w3-large"><b>Nearby Restaurant in Map:</b></span>
+        <div onclick="showAroundRestaurant();" class="w3-button w3-blue w3-bar-item w3-right">Search</div>
+        <input id="search-range" type="number" class="w3-col l2 m2 s2 w3-input w3-bar-item w3-right" placeholder="Searching Range (0-10km)"/>
+    </div>
+    <div class="w3-padding">
+      <div id="map" class=" w3-center w3-col l12" style="height:800px;"></div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+    initConnStatus();
+
+    if(isOnline){
+        initMap();
+    }
+
+    var username = getCookie('username');
+    if(username != null){
+        var title_bar = document.getElementById('title_bar');
+        var login_button = document.getElementById('login_button');
+        title_bar.removeChild(login_button);
+
+        var user_element = document.createElement('span');
+        user_element.className = 'w3-bar-item w3-right w3-large w3-border-right';
+        user_element.innerText = username;
+
+        var log_out_element = document.createElement('span');
+        log_out_element.className = 'w3-bar-item w3-right w3-large w3-border-right';
+        log_out_element.style = 'cursor:pointer';
+        log_out_element.onclick = function () {clearCookie(); alert("Sign out successfully!");location.reload();}
+        log_out_element.innerText = 'Log out';
+
+        var add_element = document.createElement('a');
+        add_element.className = 'w3-bar-item w3-right w3-large';
+        add_element.style = 'text-decoration: none';
+        add_element.innerText = 'Add Restaurant';
+        add_element.href="/addrestaurant";
+
+        title_bar.appendChild(add_element);
+        title_bar.appendChild(log_out_element);
+        title_bar.appendChild(user_element);
+
+    }
+</script>
+</body>
+</html>
+
